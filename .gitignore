@@ -1,0 +1,24 @@
+# Runtime configuration — real values live here, never in the repo.
+config.env
+*.env
+!*.example.env
+!*.env.example
+
+# Runtime state produced by the tools
+.notify-state.json
+*.log
+*.state
+
+# Backups the install scripts write
+backups/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+
+# Editors / OS
+.DS_Store
+*.swp
+*~

@@ -1,0 +1,11 @@
+[Unit]
+Description=TP-Link USB WiFi izleyicisini 30 saniyede bir calistir
+
+[Timer]
+OnBootSec=2min
+OnUnitInactiveSec=30s
+AccuracySec=5s
+Unit=wifi-usb-watchdog.service
+
+[Install]
+WantedBy=timers.target

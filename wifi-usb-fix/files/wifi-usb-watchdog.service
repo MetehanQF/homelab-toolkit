@@ -1,0 +1,11 @@
+[Unit]
+Description=TP-Link USB WiFi (rtw88_usb) kilitlenme izleyicisi ve otomatik kurtarma
+Documentation=https://github.com/MetehanQF/homelab-toolkit/blob/main/wifi-usb-fix/docs/root-cause-analysis.md
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/wifi-usb-watchdog.sh
+# Kurtarma islemi ~2 dk surebilir (yeniden numaralandirma + iliskilendirme)
+TimeoutStartSec=180
+Nice=-5
