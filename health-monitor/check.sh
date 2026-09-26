@@ -50,7 +50,6 @@ note "watchdog mudahale   : $WD (son $WINDOW)"
 [ "$WD" -gt 0 ] && warn "watchdog $WD kez mudahale etti - dongle hala takiliyor"
 
 # baglanti canli mi
-IFACE=$(ip -o link show 2>/dev/null | awk -F': ' '/wlx/{print $2; exit}')
 GW=$(ip route 2>/dev/null | awk '/^default/{print $3; exit}')
 if [ -n "${GW:-}" ]; then
   # ping cap_net_raw ister. NoNewPrivileges=true altinda (or. systemd servisi)
