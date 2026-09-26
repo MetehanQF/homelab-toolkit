@@ -1,4 +1,6 @@
-# homelab-toolkit
+# Homelab Toolkit
+
+[![CI](https://github.com/MetehanQF/homelab-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/MetehanQF/homelab-toolkit/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Four small, independent fixes for problems a Raspberry Pi home lab actually runs
 into — each one written after diagnosing the failure on real hardware, not copied

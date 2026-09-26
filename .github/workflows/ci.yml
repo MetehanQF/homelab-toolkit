@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  shell:
+    name: Shell scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntax check
+        run: |
+          for f in $(git ls-files '*.sh'); do bash -n "$f" || exit 1; done
+          echo "$(git ls-files '*.sh' | wc -l) script(s) parse"
+      - name: ShellCheck
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
+          shellcheck -S warning $(git ls-files '*.sh')
+      - name: Python syntax
+        run: |
+          for f in $(git ls-files '*.py'); do python3 -m py_compile "$f" || exit 1; done
+          echo "$(git ls-files '*.py' | wc -l) module(s) compile"
+
+  privacy-gate:
+    name: Privacy gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan for anything identifying a real installation
+        run: python3 .github/scripts/privacy_gate.py .
