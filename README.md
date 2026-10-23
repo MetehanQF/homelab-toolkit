@@ -76,9 +76,10 @@ Full write-up with measurements: [`wifi-usb-fix/docs/root-cause-analysis.md`](wi
 ### `health-monitor` — the gaps a normal monitor leaves
 
 Runs a check script and forwards only the signals a general-purpose monitor does
-not already cover: `rtw88` tx-report errors, page-allocation failures, order-3
-buddyinfo collapse, gateway reachability, watchdog interventions, swap pressure,
-NFS `rsize`, and failed systemd units.
+not already cover: `rtw88` tx-report errors, page-allocation failures, a shrinking
+contiguous memory pool and rising compaction failures, gateway reachability,
+watchdog interventions, swap read-back and PSI memory pressure, NFS `rsize`, and
+failed systemd units.
 
 It notifies on *state transitions* (OK→WARN, WARN→CRITICAL, WARN→OK), so a standing
 warning does not page you every cycle. Delivery goes through a Home Assistant

@@ -6,6 +6,7 @@ config.env
 
 # Runtime state produced by the tools
 .notify-state.json
+.mem-counters
 *.log
 *.state
 

@@ -62,13 +62,21 @@ CONTAINER, ALERT_SCRIPT, SOURCE, WINDOW = _config()
 # loglanir ama bildirilmez (sahibi Alert Center).
 RULES = [
     (r"PING'E YANIT VERMIYOR", 'CRITICAL'),   # ag geciti dustu
-    (r'order-3 bir ornekte', 'CRITICAL'),      # rtw88 kilitlenme esigi
+    (r'bellek havuzu KRITIK', 'CRITICAL'),     # rtw88 kilitlenme esigi
     (r'tx report hatasi', 'CRITICAL'),         # duzeltme tutmuyor
     (r'allocation failure', 'CRITICAL'),
     (r'watchdog \d+ kez mudahale', 'WARNING'),
     (r'watchdog\.timer calismiyor', 'WARNING'),
-    (r'order-3 medyani dusuk', 'WARNING'),
-    (r'swap %\d+ dolu', 'WARNING'),
+    # order-3 sayaci esikten cikarildi. O sayac ust order bolunerek karsilandigi
+    # icin bellek SAGLAMKEN de 2'ye duser ve 3 gunde 10 yanlis alarm (4 CRITICAL)
+    # uretti. Yerine gercek bitisik havuz + baski artis hizi geldi (check.sh bolum 2).
+    (r'bellek havuzu dusuk', 'WARNING'),
+    (r'compaction basarisizligi artiyor', 'WARNING'),
+    (r'dogrudan geri kazanim artiyor', 'WARNING'),
+    # "swap %N dolu" kaldirildi - swap bosta sayfalarla dolup 37 yanlis bildirim
+    # uretti. Yerine geri okuma hizi + PSI (check.sh bolum 2).
+    (r"swap'tan geri okuma yuksek", 'WARNING'),
+    (r'bellek basinci yuksek', 'WARNING'),
     (r'NFS rsize=', 'WARNING'),
     (r'adet failed systemd unit', 'WARNING'),
 ]
@@ -143,7 +151,10 @@ def main():
         return 2
 
     severity, notify, local = classify(stdout)
-    signature = severity + '|' + '\n'.join(sorted(notify))
+    # Imza sayilardan arindirilir: ayni uyari %79->%80 diye degisince yeni olay
+    # sayilip telefona tekrar gidiyordu. Yeni bildirim yalnizca uyari TURU
+    # degisince ya da temizlenince gider.
+    signature = severity + '|' + '\n'.join(sorted(re.sub(r'\d+', '#', t) for t in notify))
     previous = {}
     if STATE.exists():
         try:
